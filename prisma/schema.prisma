@@ -25,7 +25,7 @@ model Leads {
   proposalSent Boolean
   demoDone Boolean
   interestedInSm Boolean
-  TidGenerated String
+  TidGenerated Boolean
   whatsappGroupCreaded Boolean
   accountSetupDone Boolean
   trainingDone Boolean

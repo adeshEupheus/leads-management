@@ -158,7 +158,7 @@ export default function Home() {
         values.proposalSent === "Yes" ? true : false,
         values.demoDone === "Yes" ? true : false,
         values.interestedInSM === "Yes" ? true : false,
-        values.TidGenerated,
+        values.TidGenerated === "Yes" ? true : false,
         values.whatsappGroupCreated === "Yes" ? true : false,
         values.trainingDone === "Yes" ? true : false,
         values.invRaised === "Yes" ? true : false,
@@ -369,11 +369,12 @@ export default function Home() {
           </p>
         </div>
         <div className="flex flex-col gap-1">
-          <TextInput
-            label="TID Generated"
+          <DropDown
+            label="Interested in SM ?"
             handleChange={(val) => {
               formik.values.TidGenerated = val;
             }}
+            data={data}
           />
           <p className="text-red-500 italic">
             {formik.errors.TidGenerated ? formik.errors.TidGenerated : ""}

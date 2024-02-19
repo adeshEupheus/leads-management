@@ -18,7 +18,7 @@ export async function AddLead(
   proposalSent: boolean,
   demoDone: boolean,
   interestedInSm: boolean,
-  TidGenerated: string,
+  TidGenerated: boolean,
   whatsappGroupCreaded: boolean,
   trainingDone: boolean,
   invRaised: boolean,
