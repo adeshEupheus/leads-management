@@ -3,6 +3,23 @@ import prisma from "@/lib/prisma";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+const cookieStore = cookies();
+
+export async function AuthenticateMiddleware(token: string) {
+  if (!token) {
+    return { status: 401, message: "Unauthorized" };
+  } else {
+    try {
+      jwt.verify(token, process.env.JWT_SECRET!);
+      return { status: 200, message: "success" };
+    } catch (error) {
+      console.log(error);
+
+      return { status: 401, message: "Unauthorized" };
+    }
+  }
+}
 
 export async function AddLead(
   schoolName: string,
@@ -28,15 +45,9 @@ export async function AddLead(
   token: string
 ) {
   // Check token
-  let isValid = true;
-  try {
-    jwt.verify(token, process.env.JWT_SECRET!);
-  } catch (error) {
-    isValid = false;
-  }
-  if (!isValid) {
+  const res = await AuthenticateMiddleware(token);
+  if (res.status === 401) {
     redirect("/login");
-    return { status: 401, message: "Unauthorized" };
   } else {
     const newLead = await prisma.leads.create({
       data: {
@@ -68,7 +79,6 @@ export async function AddLead(
       return { status: 500, message: "server errror" };
     }
   }
-  // ...
 }
 
 export async function logIn(email: string, password: string) {
@@ -85,8 +95,7 @@ export async function logIn(email: string, password: string) {
     return { status: 401, message: "wrong password" };
   }
 
-  const token = jwt.sign({ email }, "secret");
-  console.log(token);
+  const token = jwt.sign({ email }, process.env.JWT_SECRET!);
 
   return { status: 200, message: "success", token };
 }
