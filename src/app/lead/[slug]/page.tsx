@@ -12,6 +12,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const stateHeadsData = await getStateHead(lead.stateHead.toString());
   const zonalHeadsData = await getZonalHead(lead.zonalHead.toString());
 
+  console.log(lead);
+
   return (
     <>
       <Navbar />

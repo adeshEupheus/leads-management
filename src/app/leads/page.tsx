@@ -370,11 +370,12 @@ export default function Home() {
             </p>
           </div>
           <div className="flex flex-col gap-1">
-            <TextInput
+            <DropDown
               label="Version Proposed"
               handleChange={(val) => {
-                formik.values.versionProposed = val;
+                formik.values.versionProposed = val.label;
               }}
+              data={[{ label: "Basic" }, { label: "Full" }]}
             />
           </div>
           <div className="flex flex-col gap-1">
