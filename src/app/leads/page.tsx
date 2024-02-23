@@ -248,6 +248,9 @@ export default function Home() {
     }[]
   >([]);
   useEffect(() => {
+    if (!Cookies.get("token")) {
+      window.location.href = "/login";
+    }
     const getAreaHeads = async () => {
       const res = await returnAreaHeads();
       const areaHeads = res.map((areaHead) => ({

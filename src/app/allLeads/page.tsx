@@ -5,22 +5,16 @@ import {
   getZonalHead,
 } from "@/api/Apis";
 import Navbar from "@/components/Navbar";
+import returnToken from "@/util/checkToken";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 // import { useEffect, useState } from "react";
 
 export default async function AllLeads() {
-  //   const [allLeads, setAllLeads] = useState<any[]>([]);
-  //   console.log(allLeads);
-
-  //   useEffect(() => {
-  //     const getLeads = async () => {
-  //       const allLeads = await getAllLeads();
-  //       setAllLeads(allLeads);
-  //     };
-  //     getLeads();
-  //   }, []);
-
   const allLeads: any[] = await getAllLeads();
+  if (returnToken() === false) {
+    redirect("/login");
+  }
 
   return (
     <>

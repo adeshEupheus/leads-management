@@ -1,7 +1,12 @@
 import { getAreaHead, getLead, getStateHead, getZonalHead } from "@/api/Apis";
 import Navbar from "@/components/Navbar";
+import returnToken from "@/util/checkToken";
+import { redirect } from "next/navigation";
 
 export default async function Page({ params }: { params: { slug: string } }) {
+  if (returnToken() === false) {
+    redirect("/login");
+  }
   const lead: any = await getLead(params.slug);
   const areaHeadsData = await getAreaHead(lead.areaHead.toString());
   const stateHeadsData = await getStateHead(lead.stateHead.toString());

@@ -1,7 +1,4 @@
 import "./globals.css";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import Navbar from "@/components/Navbar";
 
 // export const metadata = {
 //   title: "Next.js",
