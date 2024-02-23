@@ -1,8 +1,7 @@
 import "./globals.css";
-import { useEffect } from "react";
-import Cookies from "js-cookie";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 
 // export const metadata = {
 //   title: "Next.js",
@@ -14,29 +13,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // const token = Cookies.get("token");
-  // console.log(token);
-  // if (!token) {
-  //   redirect("/login");
-  // }
-
   return (
     <html lang="en">
-      <body>
-        <div className="w-full py-8 px-4 bg-blue-400 flex justify-start gap-2">
-          <Link href="/allLeads">
-            <button className="px-4 py-2 bg-white rounded-md font-semibold">
-              All Leads
-            </button>
-          </Link>
-          <Link href="/leads">
-            <button className="px-4 py-2 bg-white rounded-md font-semibold">
-              Submit Leads
-            </button>
-          </Link>
-        </div>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

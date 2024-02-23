@@ -4,6 +4,7 @@ import {
   getStateHead,
   getZonalHead,
 } from "@/api/Apis";
+import Navbar from "@/components/Navbar";
 import Link from "next/link";
 // import { useEffect, useState } from "react";
 
@@ -22,11 +23,14 @@ export default async function AllLeads() {
   const allLeads: any[] = await getAllLeads();
 
   return (
-    <div className="min-h-screen flex flex-col gap-4 py-8 px-4 bg-gray-100">
-      {allLeads.map((lead) => {
-        return <Lead key={lead.id} {...lead} />;
-      })}
-    </div>
+    <>
+      <Navbar />
+      <div className="min-h-screen flex flex-col gap-4 py-8 px-4 bg-gray-100">
+        {allLeads.map((lead) => {
+          return <Lead key={lead.id} {...lead} />;
+        })}
+      </div>
+    </>
   );
 }
 

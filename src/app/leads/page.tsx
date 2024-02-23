@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import Loader from "@/components/Loader";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   const formik = useFormik({
@@ -268,228 +269,231 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className="bg-gray-100 min-h-screen py-8 flex flex-col md:items-stretch items-center">
-      <span className="text-3xl font-bold mb-4 ml-8">Fill The Details</span>
-      <Loader loading={loading} />
-      <div className="w-[100w] grid lg:grid-cols-3 md:grid-cols-2 md:grid-rows-10 lg:grid-rows-7 grid-cols-1 grid-rows-[21] gap-4 py-8 md:justify-items-start justify-items-center md:ml-8">
-        <div className="flex flex-col gap-1">
-          <TextInput
-            label="Name of School"
-            handleChange={(val) => {
-              formik.values.schoolName = val;
-            }}
-          />
-          <p className="text-red-500 italic">
-            {formik.errors.schoolName ? formik.errors.schoolName : ""}
-          </p>
-        </div>
-        <div className="flex flex-col gap-1">
-          <TextInput
-            label="City"
-            handleChange={(val) => {
-              formik.values.city = val;
-            }}
-          />
-          <p className="text-red-500 italic">
-            {formik.errors.city ? formik.errors.city : ""}
-          </p>
-        </div>
-        <div className="flex flex-col gap-1">
-          <DropDown
-            label="State"
-            handleChange={(val) => {
-              formik.values.state = val.label;
-            }}
-            data={states}
-          />
-          <p className="text-red-500 italic">
-            {formik.errors.state ? formik.errors.state : ""}
-          </p>
-        </div>
-        <div className="flex flex-col gap-1">
-          <TextInput
-            label="Number of Students"
-            type="number"
-            handleChange={(val) => {
-              formik.values.numOfStudent = val;
-            }}
-          />
-          <p className="text-red-500 italic">
-            {formik.errors.numOfStudent ? formik.errors.numOfStudent : ""}
-          </p>
-        </div>
+    <>
+      <Navbar />
+      <div className="bg-gray-100 min-h-screen py-8 flex flex-col md:items-stretch items-center">
+        <span className="text-3xl font-bold mb-4 ml-8">Fill The Details</span>
+        <Loader loading={loading} />
+        <div className="w-[100w] grid lg:grid-cols-3 md:grid-cols-2 md:grid-rows-10 lg:grid-rows-7 grid-cols-1 grid-rows-[21] gap-4 py-8 md:justify-items-start justify-items-center md:ml-8">
+          <div className="flex flex-col gap-1">
+            <TextInput
+              label="Name of School"
+              handleChange={(val) => {
+                formik.values.schoolName = val;
+              }}
+            />
+            <p className="text-red-500 italic">
+              {formik.errors.schoolName ? formik.errors.schoolName : ""}
+            </p>
+          </div>
+          <div className="flex flex-col gap-1">
+            <TextInput
+              label="City"
+              handleChange={(val) => {
+                formik.values.city = val;
+              }}
+            />
+            <p className="text-red-500 italic">
+              {formik.errors.city ? formik.errors.city : ""}
+            </p>
+          </div>
+          <div className="flex flex-col gap-1">
+            <DropDown
+              label="State"
+              handleChange={(val) => {
+                formik.values.state = val.label;
+              }}
+              data={states}
+            />
+            <p className="text-red-500 italic">
+              {formik.errors.state ? formik.errors.state : ""}
+            </p>
+          </div>
+          <div className="flex flex-col gap-1">
+            <TextInput
+              label="Number of Students"
+              type="number"
+              handleChange={(val) => {
+                formik.values.numOfStudent = val;
+              }}
+            />
+            <p className="text-red-500 italic">
+              {formik.errors.numOfStudent ? formik.errors.numOfStudent : ""}
+            </p>
+          </div>
 
-        <div className="flex flex-col gap-1">
-          <DropDown
-            label="Area Head"
-            handleChange={async (val) => {
-              setLoading(true);
-              const data = await returnStateAndZonalHeads(val.fk_managerId);
-              setLoading(false);
-              setManagerData(data);
-              formik.values.areaHead = val.id;
-              formik.values.stateHead = val.fk_managerId;
-              formik.values.zonalHead = data.zonalHeadId;
-            }}
-            data={areaHeads}
-          />
-          <p className="text-red-500 italic">
-            {formik.errors.areaHead ? formik.errors.areaHead : ""}
-          </p>
-        </div>
-        <div className="flex flex-col gap-1">
-          <TextInput
-            placeholder="State Head"
-            value={managerData?.stateHead}
-            readOnly={true}
-          />
-        </div>
+          <div className="flex flex-col gap-1">
+            <DropDown
+              label="Area Head"
+              handleChange={async (val) => {
+                setLoading(true);
+                const data = await returnStateAndZonalHeads(val.fk_managerId);
+                setLoading(false);
+                setManagerData(data);
+                formik.values.areaHead = val.id;
+                formik.values.stateHead = val.fk_managerId;
+                formik.values.zonalHead = data.zonalHeadId;
+              }}
+              data={areaHeads}
+            />
+            <p className="text-red-500 italic">
+              {formik.errors.areaHead ? formik.errors.areaHead : ""}
+            </p>
+          </div>
+          <div className="flex flex-col gap-1">
+            <TextInput
+              placeholder="State Head"
+              value={managerData?.stateHead}
+              readOnly={true}
+            />
+          </div>
 
-        <div className="flex flex-col gap-1">
-          <TextInput
-            placeholder="Zonal Head"
-            value={managerData?.zonalHead}
-            readOnly={true}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <TextInput
-            label="EL Sales POC"
-            handleChange={(val) => {
-              formik.values.ElSales = val;
-            }}
-          />
-          <p className="text-red-500 italic">
-            {formik.errors.ElSales ? formik.errors.ElSales : ""}
-          </p>
-        </div>
-        <div className="flex flex-col gap-1">
-          <TextInput
-            label="Version Proposed"
-            handleChange={(val) => {
-              formik.values.versionProposed = val;
-            }}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <TextInput
-            label="Pricing Proposed"
-            handleChange={(val) => {
-              formik.values.priceProposed = val;
-            }}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <TextInput
-            label="Pricing Finalized ?"
-            handleChange={(val) => {
-              formik.values.pricingFinalized = val;
-            }}
-          />
-        </div>
+          <div className="flex flex-col gap-1">
+            <TextInput
+              placeholder="Zonal Head"
+              value={managerData?.zonalHead}
+              readOnly={true}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <TextInput
+              label="EL Sales POC"
+              handleChange={(val) => {
+                formik.values.ElSales = val;
+              }}
+            />
+            <p className="text-red-500 italic">
+              {formik.errors.ElSales ? formik.errors.ElSales : ""}
+            </p>
+          </div>
+          <div className="flex flex-col gap-1">
+            <TextInput
+              label="Version Proposed"
+              handleChange={(val) => {
+                formik.values.versionProposed = val;
+              }}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <TextInput
+              label="Pricing Proposed"
+              handleChange={(val) => {
+                formik.values.priceProposed = val;
+              }}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <TextInput
+              label="Pricing Finalized ?"
+              handleChange={(val) => {
+                formik.values.pricingFinalized = val;
+              }}
+            />
+          </div>
 
-        <div className="flex flex-col gap-1">
-          <DropDown
-            label="Proposal Sent ?"
-            handleChange={(val) => {
-              formik.values.proposalSent = val.label;
-            }}
-            data={data}
-          />
-        </div>
+          <div className="flex flex-col gap-1">
+            <DropDown
+              label="Proposal Sent ?"
+              handleChange={(val) => {
+                formik.values.proposalSent = val.label;
+              }}
+              data={data}
+            />
+          </div>
 
-        <div className="flex flex-col gap-1">
-          <DropDown
-            label="Demo Done ?"
-            handleChange={(val) => {
-              formik.values.demoDone = val.label;
-            }}
-            data={data}
-          />
-        </div>
+          <div className="flex flex-col gap-1">
+            <DropDown
+              label="Demo Done ?"
+              handleChange={(val) => {
+                formik.values.demoDone = val.label;
+              }}
+              data={data}
+            />
+          </div>
 
-        <div className="flex flex-col gap-1">
-          <DropDown
-            label="Interested in SM ?"
-            handleChange={(val) => {
-              formik.values.interestedInSM = val.label;
-            }}
-            data={data}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <DropDown
-            label="Tid Generated ?"
-            handleChange={(val) => {
-              formik.values.TidGenerated = val.label;
-            }}
-            data={data}
-          />
-        </div>
+          <div className="flex flex-col gap-1">
+            <DropDown
+              label="Interested in SM ?"
+              handleChange={(val) => {
+                formik.values.interestedInSM = val.label;
+              }}
+              data={data}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <DropDown
+              label="Tid Generated ?"
+              handleChange={(val) => {
+                formik.values.TidGenerated = val.label;
+              }}
+              data={data}
+            />
+          </div>
 
-        <div className="flex flex-col gap-1">
-          <DropDown
-            label="Whatsapp Group Created ?"
-            handleChange={(val) => {
-              formik.values.whatsappGroupCreated = val.label;
-            }}
-            data={data}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <DropDown
-            label="Account Setup Done ?"
-            handleChange={(val) => {
-              formik.values.accSetupDone = val.label;
-            }}
-            data={data}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <DropDown
-            label="Training Done ?"
-            handleChange={(val) => {
-              formik.values.trainingDone = val.label;
-            }}
-            data={data}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <DropDown
-            label="Invoice Raised ?"
-            handleChange={(val) => {
-              formik.values.invRaised = val.label;
-            }}
-            data={data}
-          />
-        </div>
+          <div className="flex flex-col gap-1">
+            <DropDown
+              label="Whatsapp Group Created ?"
+              handleChange={(val) => {
+                formik.values.whatsappGroupCreated = val.label;
+              }}
+              data={data}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <DropDown
+              label="Account Setup Done ?"
+              handleChange={(val) => {
+                formik.values.accSetupDone = val.label;
+              }}
+              data={data}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <DropDown
+              label="Training Done ?"
+              handleChange={(val) => {
+                formik.values.trainingDone = val.label;
+              }}
+              data={data}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <DropDown
+              label="Invoice Raised ?"
+              handleChange={(val) => {
+                formik.values.invRaised = val.label;
+              }}
+              data={data}
+            />
+          </div>
 
-        <div className="flex flex-col gap-1">
-          <TextInput
-            label="Invoice Amount ?"
-            type="number"
-            handleChange={(val) => {
-              formik.values.invAmount = val;
-            }}
-          />
-        </div>
+          <div className="flex flex-col gap-1">
+            <TextInput
+              label="Invoice Amount ?"
+              type="number"
+              handleChange={(val) => {
+                formik.values.invAmount = val;
+              }}
+            />
+          </div>
 
-        <div className="flex flex-col gap-1">
-          <DropDown
-            label="Payment Recieved By SM ?"
-            handleChange={(val) => {
-              formik.values.paymentRecievedBySM = val.label;
-            }}
-            data={data}
-          />
+          <div className="flex flex-col gap-1">
+            <DropDown
+              label="Payment Recieved By SM ?"
+              handleChange={(val) => {
+                formik.values.paymentRecievedBySM = val.label;
+              }}
+              data={data}
+            />
+          </div>
         </div>
+        <button
+          className="bg-blue-500 text-white px-16 w-fit py-2 hover:shadow-2xl transition-all ease-linear duration-200 rounded-md font-semibold ml-8"
+          onClick={() => formik.handleSubmit()}
+        >
+          Submit
+        </button>
       </div>
-      <button
-        className="bg-blue-500 text-white px-16 w-fit py-2 hover:shadow-2xl transition-all ease-linear duration-200 rounded-md font-semibold ml-8"
-        onClick={() => formik.handleSubmit()}
-      >
-        Submit
-      </button>
-    </div>
+    </>
   );
 }
