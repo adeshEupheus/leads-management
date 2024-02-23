@@ -6,29 +6,24 @@ const DropDown: React.FC<DropDownProps> = ({ label, handleChange, data }) => {
   return (
     <Autocomplete
       disablePortal
+      disableClearable
       id="combo-box-demo"
       options={data}
       sx={{ width: 300, border: "1px solid black", borderRadius: "5px" }}
       onChange={(e, val) => {
-        if (val?.label) {
-          handleChange(val?.label);
+        if (val) {
+          handleChange(val);
         }
       }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label={label}
-          onChange={(e) => console.log(e.target.value)}
-        />
-      )}
+      renderInput={(params) => <TextField {...params} label={label} />}
     />
   );
 };
 
 interface DropDownProps {
   label: string;
-  handleChange: (val: string) => void;
-  data: { label: string }[];
+  handleChange: (val: any) => void;
+  data: any[];
 }
 
 export default DropDown;

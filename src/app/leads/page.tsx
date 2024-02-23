@@ -1,11 +1,12 @@
 "use client";
 
-import { AddLead } from "@/api/Apis";
+import { AddLead, returnAreaHeads, returnStateAndZonalHeads } from "@/api/Apis";
 import DropDown from "@/components/DropDown";
 import TextInput from "@/components/TextInput";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import Loader from "@/components/Loader";
 
 export default function Home() {
   const formik = useFormik({
@@ -23,6 +24,7 @@ export default function Home() {
       proposalSent: "",
       demoDone: "",
       interestedInSM: "",
+      pricingFinalized: "",
       TidGenerated: "",
       whatsappGroupCreated: "",
       accSetupDone: "",
@@ -80,43 +82,43 @@ export default function Home() {
       if (values.ElSales === "") {
         errors.ElSales = "Please enter your expected sales";
       }
-      if (values.versionProposed === "") {
-        errors.versionProposed = "Please enter your version proposed";
-      }
-      if (values.priceProposed === "") {
-        errors.priceProposed = "Please enter your price proposed";
-      }
-      if (values.proposalSent === "") {
-        errors.proposalSent = "Please enter your proposal sent";
-      }
-      if (values.demoDone === "") {
-        errors.demoDone = "Please enter your demo done";
-      }
-      if (values.interestedInSM === "") {
-        errors.interestedInSM = "Please enter your interested in SM";
-      }
-      if (values.TidGenerated === "") {
-        errors.TidGenerated = "Please enter your Tid Generated";
-      }
-      if (values.whatsappGroupCreated === "") {
-        errors.whatsappGroupCreated =
-          "Please enter your whatsapp group created";
-      }
-      if (values.accSetupDone === "") {
-        errors.accSetupDone = "Please enter your account setup done";
-      }
-      if (values.trainingDone === "") {
-        errors.trainingDone = "Please enter your training done";
-      }
-      if (values.invRaised === "") {
-        errors.invRaised = "Please enter your invoice raised";
-      }
-      if (values.invAmount === "") {
-        errors.invAmount = "Please enter your invoice amount";
-      }
-      if (values.paymentRecievedBySM === "") {
-        errors.paymentRecievedBySM = "Please enter your payment recieved by SM";
-      }
+      // if (values.versionProposed === "") {
+      //   errors.versionProposed = "Please enter your version proposed";
+      // }
+      // if (values.priceProposed === "") {
+      //   errors.priceProposed = "Please enter your price proposed";
+      // }
+      // if (values.proposalSent === "") {
+      //   errors.proposalSent = "Please enter your proposal sent";
+      // }
+      // if (values.demoDone === "") {
+      //   errors.demoDone = "Please enter your demo done";
+      // }
+      // if (values.interestedInSM === "") {
+      //   errors.interestedInSM = "Please enter your interested in SM";
+      // }
+      // if (values.TidGenerated === "") {
+      //   errors.TidGenerated = "Please enter your Tid Generated";
+      // }
+      // if (values.whatsappGroupCreated === "") {
+      //   errors.whatsappGroupCreated =
+      //     "Please enter your whatsapp group created";
+      // }
+      // if (values.accSetupDone === "") {
+      //   errors.accSetupDone = "Please enter your account setup done";
+      // }
+      // if (values.trainingDone === "") {
+      //   errors.trainingDone = "Please enter your training done";
+      // }
+      // if (values.invRaised === "") {
+      //   errors.invRaised = "Please enter your invoice raised";
+      // }
+      // if (values.invAmount === "") {
+      //   errors.invAmount = "Please enter your invoice amount";
+      // }
+      // if (values.paymentRecievedBySM === "") {
+      //   errors.paymentRecievedBySM = "Please enter your payment recieved by SM";
+      // }
 
       if (
         errors.schoolName ||
@@ -126,24 +128,14 @@ export default function Home() {
         errors.areaHead ||
         errors.stateHead ||
         errors.zonalHead ||
-        errors.ElSales ||
-        errors.versionProposed ||
-        errors.priceProposed ||
-        errors.proposalSent ||
-        errors.demoDone ||
-        errors.interestedInSM ||
-        errors.TidGenerated ||
-        errors.whatsappGroupCreated ||
-        errors.accSetupDone ||
-        errors.trainingDone ||
-        errors.invRaised ||
-        errors.invAmount ||
-        errors.paymentRecievedBySM
+        errors.ElSales
       ) {
         return errors;
       }
     },
     onSubmit: async (values) => {
+      console.log(values);
+      setLoading(true);
       const res = await AddLead(
         values.schoolName,
         values.city,
@@ -153,20 +145,57 @@ export default function Home() {
         values.stateHead,
         values.zonalHead,
         values.ElSales,
-        values.versionProposed,
-        values.priceProposed,
-        values.proposalSent === "Yes" ? true : false,
-        values.demoDone === "Yes" ? true : false,
-        values.interestedInSM === "Yes" ? true : false,
-        values.TidGenerated === "Yes" ? true : false,
-        values.whatsappGroupCreated === "Yes" ? true : false,
-        values.trainingDone === "Yes" ? true : false,
-        values.invRaised === "Yes" ? true : false,
-        values.invAmount,
-        values.accSetupDone === "Yes" ? true : false,
-        values.paymentRecievedBySM === "Yes" ? true : false,
+        values.versionProposed ? values.versionProposed : undefined,
+        values.priceProposed ? values.priceProposed : undefined,
+        values.proposalSent
+          ? values.proposalSent === "Yes"
+            ? true
+            : false
+          : undefined,
+        values.demoDone
+          ? values.demoDone === "Yes"
+            ? true
+            : false
+          : undefined,
+        values.interestedInSM
+          ? values.interestedInSM === "Yes"
+            ? true
+            : false
+          : undefined,
+        values.TidGenerated
+          ? values.TidGenerated === "Yes"
+            ? true
+            : false
+          : undefined,
+        values.whatsappGroupCreated
+          ? values.whatsappGroupCreated === "Yes"
+            ? true
+            : false
+          : undefined,
+        values.trainingDone
+          ? values.trainingDone === "Yes"
+            ? true
+            : false
+          : undefined,
+        values.invRaised
+          ? values.invRaised === "Yes"
+            ? true
+            : false
+          : undefined,
+        values.invAmount ? values.invAmount : undefined,
+        values.accSetupDone
+          ? values.accSetupDone === "Yes"
+            ? true
+            : false
+          : undefined,
+        values.paymentRecievedBySM
+          ? values.paymentRecievedBySM === "Yes"
+            ? true
+            : false
+          : undefined,
         Cookies.get("token")!
       );
+      setLoading(false);
       console.log(res);
 
       if (res.status === 200) {
@@ -210,10 +239,38 @@ export default function Home() {
     { label: "West Bengal" },
   ];
   const data = [{ label: "Yes" }, { label: "No" }];
+  const [areaHeads, setAreaHeads] = useState<
+    {
+      id: string;
+      label: string;
+      fk_managerId: string;
+    }[]
+  >([]);
+  useEffect(() => {
+    const getAreaHeads = async () => {
+      const res = await returnAreaHeads();
+      const areaHeads = res.map((areaHead) => ({
+        id: areaHead.id,
+        label: areaHead.name,
+        fk_managerId: areaHead.fk_managerId,
+      }));
+      setAreaHeads(areaHeads);
+    };
+    getAreaHeads();
+  }, []);
+  const [managerData, setManagerData] = useState<{
+    stateHeadId: string;
+    stateHead: string;
+    zonalHeadId: string;
+    zonalHead: string;
+  }>({ stateHeadId: "", stateHead: "", zonalHeadId: "", zonalHead: "" });
+
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="bg-gray-100 min-h-screen py-8 flex flex-col md:items-stretch items-center">
       <span className="text-3xl font-bold mb-4 ml-8">Fill The Details</span>
+      <Loader loading={loading} />
       <div className="w-[100w] grid lg:grid-cols-3 md:grid-cols-2 md:grid-rows-10 lg:grid-rows-7 grid-cols-1 grid-rows-[21] gap-4 py-8 md:justify-items-start justify-items-center md:ml-8">
         <div className="flex flex-col gap-1">
           <TextInput
@@ -241,7 +298,7 @@ export default function Home() {
           <DropDown
             label="State"
             handleChange={(val) => {
-              formik.values.state = val;
+              formik.values.state = val.label;
             }}
             data={states}
           />
@@ -263,11 +320,18 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col gap-1">
-          <TextInput
+          <DropDown
             label="Area Head"
-            handleChange={(val) => {
-              formik.values.areaHead = val;
+            handleChange={async (val) => {
+              setLoading(true);
+              const data = await returnStateAndZonalHeads(val.fk_managerId);
+              setLoading(false);
+              setManagerData(data);
+              formik.values.areaHead = val.id;
+              formik.values.stateHead = val.fk_managerId;
+              formik.values.zonalHead = data.zonalHeadId;
             }}
+            data={areaHeads}
           />
           <p className="text-red-500 italic">
             {formik.errors.areaHead ? formik.errors.areaHead : ""}
@@ -275,26 +339,18 @@ export default function Home() {
         </div>
         <div className="flex flex-col gap-1">
           <TextInput
-            label="State Head"
-            handleChange={(val) => {
-              formik.values.stateHead = val;
-            }}
+            placeholder="State Head"
+            value={managerData?.stateHead}
+            readOnly={true}
           />
-          <p className="text-red-500 italic">
-            {formik.errors.stateHead ? formik.errors.stateHead : ""}
-          </p>
         </div>
 
         <div className="flex flex-col gap-1">
           <TextInput
-            label="Zonal Head"
-            handleChange={(val) => {
-              formik.values.zonalHead = val;
-            }}
+            placeholder="Zonal Head"
+            value={managerData?.zonalHead}
+            readOnly={true}
           />
-          <p className="text-red-500 italic">
-            {formik.errors.zonalHead ? formik.errors.zonalHead : ""}
-          </p>
         </div>
         <div className="flex flex-col gap-1">
           <TextInput
@@ -314,9 +370,6 @@ export default function Home() {
               formik.values.versionProposed = val;
             }}
           />
-          <p className="text-red-500 italic">
-            {formik.errors.versionProposed ? formik.errors.versionProposed : ""}
-          </p>
         </div>
         <div className="flex flex-col gap-1">
           <TextInput
@@ -325,111 +378,90 @@ export default function Home() {
               formik.values.priceProposed = val;
             }}
           />
-          <p className="text-red-500 italic">
-            {formik.errors.priceProposed ? formik.errors.priceProposed : ""}
-          </p>
+        </div>
+        <div className="flex flex-col gap-1">
+          <TextInput
+            label="Pricing Finalized ?"
+            handleChange={(val) => {
+              formik.values.pricingFinalized = val;
+            }}
+          />
         </div>
 
         <div className="flex flex-col gap-1">
           <DropDown
             label="Proposal Sent ?"
             handleChange={(val) => {
-              formik.values.proposalSent = val;
+              formik.values.proposalSent = val.label;
             }}
             data={data}
           />
-          <p className="text-red-500 italic">
-            {formik.errors.proposalSent ? formik.errors.proposalSent : ""}
-          </p>
         </div>
 
         <div className="flex flex-col gap-1">
           <DropDown
             label="Demo Done ?"
             handleChange={(val) => {
-              formik.values.demoDone = val;
+              formik.values.demoDone = val.label;
             }}
             data={data}
           />
-          <p className="text-red-500 italic">
-            {formik.errors.demoDone ? formik.errors.demoDone : ""}
-          </p>
         </div>
 
         <div className="flex flex-col gap-1">
           <DropDown
             label="Interested in SM ?"
             handleChange={(val) => {
-              formik.values.interestedInSM = val;
+              formik.values.interestedInSM = val.label;
             }}
             data={data}
           />
-          <p className="text-red-500 italic">
-            {formik.errors.interestedInSM ? formik.errors.interestedInSM : ""}
-          </p>
         </div>
         <div className="flex flex-col gap-1">
           <DropDown
-            label="Interested in SM ?"
+            label="Tid Generated ?"
             handleChange={(val) => {
-              formik.values.TidGenerated = val;
+              formik.values.TidGenerated = val.label;
             }}
             data={data}
           />
-          <p className="text-red-500 italic">
-            {formik.errors.TidGenerated ? formik.errors.TidGenerated : ""}
-          </p>
         </div>
 
         <div className="flex flex-col gap-1">
           <DropDown
             label="Whatsapp Group Created ?"
             handleChange={(val) => {
-              formik.values.whatsappGroupCreated = val;
+              formik.values.whatsappGroupCreated = val.label;
             }}
             data={data}
           />
-          <p className="text-red-500 italic">
-            {formik.errors.whatsappGroupCreated
-              ? formik.errors.whatsappGroupCreated
-              : ""}
-          </p>
         </div>
         <div className="flex flex-col gap-1">
           <DropDown
             label="Account Setup Done ?"
             handleChange={(val) => {
-              formik.values.accSetupDone = val;
+              formik.values.accSetupDone = val.label;
             }}
             data={data}
           />
-          <p className="text-red-500 italic">
-            {formik.errors.accSetupDone ? formik.errors.accSetupDone : ""}
-          </p>
         </div>
         <div className="flex flex-col gap-1">
           <DropDown
             label="Training Done ?"
             handleChange={(val) => {
-              formik.values.trainingDone = val;
+              formik.values.trainingDone = val.label;
             }}
             data={data}
           />
-          <p className="text-red-500 italic">
-            {formik.errors.trainingDone ? formik.errors.trainingDone : ""}
-          </p>
         </div>
         <div className="flex flex-col gap-1">
           <DropDown
             label="Invoice Raised ?"
             handleChange={(val) => {
-              formik.values.invRaised = val;
+              formik.values.invRaised = val.label;
             }}
             data={data}
           />
-          <p className="text-red-500 italic">
-            {formik.errors.invRaised ? formik.errors.invRaised : ""}
-          </p>
         </div>
 
         <div className="flex flex-col gap-1">
@@ -440,24 +472,16 @@ export default function Home() {
               formik.values.invAmount = val;
             }}
           />
-          <p className="text-red-500 italic">
-            {formik.errors.invAmount ? formik.errors.invAmount : ""}
-          </p>
         </div>
 
         <div className="flex flex-col gap-1">
           <DropDown
             label="Payment Recieved By SM ?"
             handleChange={(val) => {
-              formik.values.paymentRecievedBySM = val;
+              formik.values.paymentRecievedBySM = val.label;
             }}
             data={data}
           />
-          <p className="text-red-500 italic">
-            {formik.errors.paymentRecievedBySM
-              ? formik.errors.paymentRecievedBySM
-              : ""}
-          </p>
         </div>
       </div>
       <button

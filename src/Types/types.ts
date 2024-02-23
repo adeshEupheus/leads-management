@@ -1,0 +1,24 @@
+type Lead = {
+  id: String;
+  schoolName: String;
+  city: String;
+  state: String;
+  numberOfStudents: Number;
+  areaHead: String;
+  stateHead: String;
+  zonalHead: String;
+  elSalesPoc: String;
+  versionProposed?: String;
+  pricingProposed?: String;
+  pricingFinalized?: String;
+  proposalSent?: Boolean;
+  demoDone?: Boolean;
+  interestedInSm?: Boolean;
+  TidGenerated?: Boolean;
+  whatsappGroupCreaded?: Boolean;
+  accountSetupDone?: Boolean;
+  trainingDone?: Boolean;
+  invRaised?: Boolean;
+  invAmount?: String;
+  paymentRecievedBySm?: Boolean;
+};

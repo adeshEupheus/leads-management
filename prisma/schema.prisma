@@ -20,18 +20,19 @@ model Leads {
   stateHead String
   zonalHead String
   elSalesPoc String
-  versionProposed String
-  pricingProposed String
-  proposalSent Boolean
-  demoDone Boolean
-  interestedInSm Boolean
-  TidGenerated Boolean
-  whatsappGroupCreaded Boolean
-  accountSetupDone Boolean
-  trainingDone Boolean
-  invRaised Boolean
-  invAmount String
-  paymentRecievedBySm Boolean
+  versionProposed String?
+  pricingProposed String?
+  pricingFinalized String?
+  proposalSent Boolean?
+  demoDone Boolean?
+  interestedInSm Boolean?
+  TidGenerated Boolean?
+  whatsappGroupCreaded Boolean?
+  accountSetupDone Boolean?
+  trainingDone Boolean?
+  invRaised Boolean?
+  invAmount String?
+  paymentRecievedBySm Boolean?
 }
 
 
@@ -39,4 +40,39 @@ model Users {
   id String @id @default(uuid())
   email String @unique
   password String
+}
+
+model ZonalHeads {
+  id String @id @default(uuid())
+  name String
+  stateHeads StateHeads[]
+}
+
+model StateHeads {
+  id String @id @default(uuid())
+  name String
+  fk_manager   ZonalHeads @relation(fields: [fk_managerId], references: [id])
+  fk_managerId String
+  areaHeads AreaHeads[]
+}
+
+model AreaHeads {
+  id String @id @default(uuid())
+  name String
+  fk_manager   StateHeads @relation(fields: [fk_managerId], references: [id])
+  fk_managerId String
+}
+
+
+model State {
+  id String @id @default(uuid())
+  state String
+  city City[]
+}
+
+model City {
+  id String @id @default(uuid())
+  city String
+  fk_state   State @relation(fields: [fk_stateId], references: [id])
+  fk_stateId String
 }
