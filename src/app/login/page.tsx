@@ -15,7 +15,6 @@ export default function Login() {
     },
     validate: (values) => {
       const errors: { email?: string; password?: string } = {};
-      console.log(errors);
 
       if (values.email === "") {
         errors.email = "Please enter your email";
@@ -23,12 +22,10 @@ export default function Login() {
       if (values.password === "") {
         errors.password = "Please enter your password";
       }
-      console.log(errors);
-      console.log(formik.errors.email);
 
-      if (errors.email || errors.password) {
-        return errors;
-      }
+      // if (errors.email || errors.password) {
+      return errors;
+      // }
     },
     onSubmit: async (values) => {
       const res = await logIn(formik.values.email, formik.values.password);
