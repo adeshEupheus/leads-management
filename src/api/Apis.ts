@@ -21,7 +21,14 @@ export async function AuthenticateMiddleware(token: string) {
   }
 }
 export async function getAllLeads() {
-  const allLeads = await prisma.leads.findMany();
+  const allLeads = await prisma.leads.findMany({
+    relationLoadStrategy: "join",
+    include: {
+      fk_areaHead: true,
+      fk_stateHead: true,
+      fk_zonalHead: true,
+    },
+  });
   return allLeads;
 }
 
@@ -57,6 +64,7 @@ export async function getLead(id: string) {
       id,
     },
   });
+
   return leadData;
 }
 

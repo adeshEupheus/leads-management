@@ -8,6 +8,9 @@ import Navbar from "@/components/Navbar";
 import returnToken from "@/util/checkToken";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { DataGrid } from "@mui/x-data-grid";
+import Table from "./Table";
+
 // import { useEffect, useState } from "react";
 
 export default async function AllLeads() {
@@ -16,35 +19,21 @@ export default async function AllLeads() {
     redirect("/login");
   }
 
+  const rows = allLeads.map((lead) => {
+    return {
+      ...lead,
+      areaHead: lead.fk_areaHead.name,
+      stateHead: lead.fk_stateHead.name,
+      zonalHead: lead.fk_zonalHead.name,
+    };
+  });
+
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex flex-col gap-4 py-8 px-4 bg-gray-100">
-        {allLeads.map((lead) => {
-          return <Lead key={lead.id} {...lead} />;
-        })}
+      <div className=" flex flex-col gap-4 py-8 px-4 bg-gray-100">
+        <Table rows={rows} />
       </div>
     </>
   );
 }
-
-const Lead = async (Lead: Lead) => {
-  const areaHeadsData = await getAreaHead(Lead.areaHead.toString());
-  const stateHeadsData = await getStateHead(Lead.stateHead.toString());
-  const zonalHeadsData = await getZonalHead(Lead.zonalHead.toString());
-
-  return (
-    <Link href={`/lead/${Lead.id}`}>
-      <div className="w-full flex gap-2 font-semibold bg-slate-300 rounded-lg shadow-2xl p-4 cursor-pointer">
-        <p>School Name: {Lead.schoolName}</p>,<p>City: {Lead.city}</p>,
-        <p>State: {Lead.state}</p>,
-        <p>Number of Students: {Lead.numberOfStudents.toString()}</p>,
-        <p>Area Head: {areaHeadsData?.name}</p>,
-        <p>State Head: {stateHeadsData?.name}</p>,
-        <p>Zonal Head: {zonalHeadsData?.name}</p>
-        <p>EL Sales POC: {Lead.elSalesPoc}</p>
-        <p>...</p>
-      </div>
-    </Link>
-  );
-};

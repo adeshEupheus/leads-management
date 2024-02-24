@@ -23,6 +23,9 @@ export default function Login() {
       if (values.password === "") {
         errors.password = "Please enter your password";
       }
+      console.log(errors);
+      console.log(formik.errors.email);
+
       if (errors.email || errors.password) {
         return errors;
       }
