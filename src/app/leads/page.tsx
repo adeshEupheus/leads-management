@@ -216,6 +216,7 @@ export default function Home() {
     { label: "Bihar" },
     { label: "Chhattisgarh" },
     { label: "Goa" },
+    { label: "Delhi" },
     { label: "Gujarat" },
     { label: "Haryana" },
     { label: "Himachal Pradesh" },
@@ -248,9 +249,13 @@ export default function Home() {
     }[]
   >([]);
   useEffect(() => {
-    if (!Cookies.get("token")) {
+    if (
+      !Cookies.get("token") ||
+      Cookies.get("user") === "hdfcHead@eupheus.in"
+    ) {
       window.location.href = "/login";
     }
+
     const getAreaHeads = async () => {
       const res = await returnAreaHeads();
       const areaHeads = res.map((areaHead) => ({

@@ -144,7 +144,7 @@ export async function logIn(email: string, password: string) {
 
   const token = jwt.sign({ email }, process.env.JWT_SECRET!);
 
-  return { status: 200, message: "success", token };
+  return { status: 200, message: "success", token, user: email };
 }
 
 export async function returnAreaHeads() {
@@ -183,10 +183,10 @@ export async function returnStateAndZonalHeads(id: string) {
 }
 
 export async function SignUp() {
-  const hash = bcryptjs.hashSync("sales@1234", 10);
+  const hash = bcryptjs.hashSync("hdfcHead@1234", 10);
   const newUser = await prisma.users.create({
     data: {
-      email: "sales@eupheus.in",
+      email: "hdfcHead@eupheus.in",
       password: hash,
     },
   });

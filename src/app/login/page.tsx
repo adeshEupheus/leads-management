@@ -1,13 +1,15 @@
 "use client";
 
-import { logIn } from "@/api/Apis";
+import { SignUp, logIn } from "@/api/Apis";
 import TextInput from "@/components/TextInput";
+import { useUserStore } from "@/store/store";
 import { useFormik } from "formik";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
   const router = useRouter();
+  const updateUser = useUserStore((state: any) => state.updateUser);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -32,7 +34,13 @@ export default function Login() {
       console.log(res);
       if (res.status === 200) {
         Cookies.set("token", res.token!);
-        router.push("/leads");
+        Cookies.set("user", res.user!);
+        updateUser(res.user);
+        if (res.user === "hdfcHead@eupheus.in") {
+          router.push("/allLeads");
+        } else {
+          router.push("/leads");
+        }
       } else {
         if (res.status === 401) {
           formik.errors.password = "Wrong Password";
